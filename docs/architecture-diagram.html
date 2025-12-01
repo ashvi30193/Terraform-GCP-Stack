@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform GCP Stack - Architecture Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .diagram {
+            position: relative;
+            min-height: 1200px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .component {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 200px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+
+        .component.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .component-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .component-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .component-desc {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+
+        .arrow {
+            position: absolute;
+            stroke: #667eea;
+            stroke-width: 3;
+            fill: none;
+            marker-end: url(#arrowhead);
+            animation: flow 2s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes flow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .flow-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            height: 3px;
+            animation: flow-line 2s infinite;
+        }
+
+        @keyframes flow-line {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .legend {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 300px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        .info-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .info-panel h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-panel p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #7f8c8d;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+
+        /* Color coding */
+        .cicd { border-left: 5px solid #3498db; }
+        .infra { border-left: 5px solid #2ecc71; }
+        .security { border-left: 5px solid #e74c3c; }
+        .monitoring { border-left: 5px solid #f39c12; }
+        .data { border-left: 5px solid #9b59b6; }
+        .cost { border-left: 5px solid #e67e22; }
+
+        .cicd .component-icon { color: #3498db; }
+        .infra .component-icon { color: #2ecc71; }
+        .security .component-icon { color: #e74c3c; }
+        .monitoring .component-icon { color: #f39c12; }
+        .data .component-icon { color: #9b59b6; }
+        .cost .component-icon { color: #e67e22; }
+
+        @media (max-width: 768px) {
+            .components {
+                flex-direction: column;
+            }
+            .component {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Terraform GCP Stack</h1>
+        <p class="subtitle">Production-Ready Infrastructure Architecture</p>
+
+        <div class="controls">
+            <button class="btn" onclick="animateAll()">Animate Flow</button>
+            <button class="btn" onclick="resetAnimation()">Reset</button>
+        </div>
+
+        <div class="diagram" id="diagram">
+            <!-- CI/CD & Automation -->
+            <div class="section">
+                <div class="section-title">🔄 CI/CD & Automation</div>
+                <div class="components cicd">
+                    <div class="component" data-module="cloud_build" onclick="showInfo('cloud_build')">
+                        <div class="component-icon">🔨</div>
+                        <div class="component-name">Cloud Build</div>
+                        <div class="component-desc">Automated CI/CD triggers for builds and deployments</div>
+                    </div>
+                    <div class="component" data-module="scheduler" onclick="showInfo('scheduler')">
+                        <div class="component-icon">⏰</div>
+                        <div class="component-name">Cloud Scheduler</div>
+                        <div class="component-desc">Scheduled job execution and automation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Infrastructure -->
+            <div class="section">
+                <div class="section-title">🏗️ Core Infrastructure</div>
+                <div class="components infra">
+                    <div class="component" data-module="cloud_run" onclick="showInfo('cloud_run')">
+                        <div class="component-icon">☁️</div>
+                        <div class="component-name">Cloud Run</div>
+                        <div class="component-desc">Serverless containers with auto-scaling</div>
+                    </div>
+                    <div class="component" data-module="internal_lb" onclick="showInfo('internal_lb')">
+                        <div class="component-icon">⚖️</div>
+                        <div class="component-name">Internal LB</div>
+                        <div class="component-desc">HTTPS load balancers for internal traffic</div>
+                    </div>
+                    <div class="component" data-module="ssl_policy" onclick="showInfo('ssl_policy')">
+                        <div class="component-icon">🔒</div>
+                        <div class="component-name">SSL Policy</div>
+                        <div class="component-desc">SSL/TLS security policies</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security & Access -->
+            <div class="section">
+                <div class="section-title">🔐 Security & Access</div>
+                <div class="components security">
+                    <div class="component" data-module="kms" onclick="showInfo('kms')">
+                        <div class="component-icon">🗝️</div>
+                        <div class="component-name">KMS</div>
+                        <div class="component-desc">Key Management Service for encryption</div>
+                    </div>
+                    <div class="component" data-module="secrets" onclick="showInfo('secrets')">
+                        <div class="component-icon">🔑</div>
+                        <div class="component-name">Secret Manager</div>
+                        <div class="component-desc">Secure secret storage and management</div>
+                    </div>
+                    <div class="component" data-module="iam_service_account" onclick="showInfo('iam_service_account')">
+                        <div class="component-icon">👤</div>
+                        <div class="component-name">IAM Service Account</div>
+                        <div class="component-desc">Service account management</div>
+                    </div>
+                    <div class="component" data-module="custom_iam_roles" onclick="showInfo('custom_iam_roles')">
+                        <div class="component-icon">🛡️</div>
+                        <div class="component-name">Custom IAM Roles</div>
+                        <div class="component-desc">Role-based access control (RBAC)</div>
+                    </div>
+                    <div class="component" data-module="audit_logging" onclick="showInfo('audit_logging')">
+                        <div class="component-icon">📋</div>
+                        <div class="component-name">Audit Logging</div>
+                        <div class="component-desc">Security audit trails and compliance</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring & Observability -->
+            <div class="section">
+                <div class="section-title">📊 Monitoring & Observability</div>
+                <div class="components monitoring">
+                    <div class="component" data-module="monitoring" onclick="showInfo('monitoring')">
+                        <div class="component-icon">📈</div>
+                        <div class="component-name">Monitoring</div>
+                        <div class="component-desc">Alerts, dashboards, and uptime checks</div>
+                    </div>
+                    <div class="component" data-module="error_reporting" onclick="showInfo('error_reporting')">
+                        <div class="component-icon">🚨</div>
+                        <div class="component-name">Error Reporting</div>
+                        <div class="component-desc">Error detection and tracking</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Messaging -->
+            <div class="section">
+                <div class="section-title">💾 Data & Messaging</div>
+                <div class="components data">
+                    <div class="component" data-module="pubsub" onclick="showInfo('pubsub')">
+                        <div class="component-icon">📨</div>
+                        <div class="component-name">Pub/Sub</div>
+                        <div class="component-desc">Message queuing and event streaming</div>
+                    </div>
+                    <div class="component" data-module="bigquery" onclick="showInfo('bigquery')">
+                        <div class="component-icon">📊</div>
+                        <div class="component-name">BigQuery</div>
+                        <div class="component-desc">Data warehouse and analytics</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Management -->
+            <div class="section">
+                <div class="section-title">💰 Cost Management</div>
+                <div class="components cost">
+                    <div class="component" data-module="budget_alerts" onclick="showInfo('budget_alerts')">
+                        <div class="component-icon">💵</div>
+                        <div class="component-name">Budget Alerts</div>
+                        <div class="component-desc">Cost monitoring and budget alerts</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Utilities -->
+            <div class="section">
+                <div class="section-title">🛠️ Utilities</div>
+                <div class="components">
+                    <div class="component" data-module="api" onclick="showInfo('api')">
+                        <div class="component-icon">🔌</div>
+                        <div class="component-name">API Enablement</div>
+                        <div class="component-desc">Enable Google Cloud APIs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-title">📖 Legend</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3498db;"></div>
+                    <span>CI/CD & Automation</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2ecc71;"></div>
+                    <span>Core Infrastructure</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span>Security & Access</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f39c12;"></div>
+                    <span>Monitoring & Observability</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #9b59b6;"></div>
+                    <span>Data & Messaging</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e67e22;"></div>
+                    <span>Cost Management</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-panel" id="infoPanel">
+        <span class="close-btn" onclick="closeInfo()">&times;</span>
+        <h3 id="infoTitle"></h3>
+        <p id="infoContent"></p>
+    </div>
+
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                <polygon points="0 0, 10 3, 0 6" fill="#667eea" />
+            </marker>
+        </defs>
+    </svg>
+
+    <script>
+        const moduleInfo = {
+            cloud_build: {
+                title: "Cloud Build",
+                content: "Automated CI/CD pipeline triggers. Builds Docker images, runs tests, and deploys to Cloud Run automatically based on Git tags or code changes."
+            },
+            scheduler: {
+                title: "Cloud Scheduler",
+                content: "Cron-based job scheduling. Triggers Cloud Run services, Pub/Sub messages, or HTTP endpoints on a schedule. Supports OIDC authentication."
+            },
+            cloud_run: {
+                title: "Cloud Run",
+                content: "Serverless container platform. Auto-scales from zero, supports VPC connectivity, custom domains, and integrates with load balancers. Gen2 execution environment."
+            },
+            internal_lb: {
+                title: "Internal Load Balancer",
+                content: "Regional HTTPS load balancer for internal traffic. Routes requests to Cloud Run services with SSL termination and health checks."
+            },
+            ssl_policy: {
+                title: "SSL Policy",
+                content: "Defines SSL/TLS security policies for load balancers. Configures minimum TLS version, cipher suites, and security profiles (MODERN, RESTRICTED, etc.)."
+            },
+            kms: {
+                title: "Key Management Service",
+                content: "Encryption key management. Creates key rings and crypto keys for encrypting secrets, disks, and other sensitive data. Supports key rotation."
+            },
+            secrets: {
+                title: "Secret Manager",
+                content: "Secure secret storage. Stores API keys, passwords, certificates. Integrates with Cloud Run for automatic secret injection as environment variables."
+            },
+            iam_service_account: {
+                title: "IAM Service Account",
+                content: "Service account management. Creates service accounts with custom roles and permissions for Cloud Run services and other resources."
+            },
+            custom_iam_roles: {
+                title: "Custom IAM Roles",
+                content: "Role-based access control. Defines custom roles (Developer, DevOps, Platform Admin, Data Analyst) with granular permissions for team members."
+            },
+            audit_logging: {
+                title: "Audit Logging",
+                content: "Security audit trails. Tracks all API calls and resource changes for compliance and security monitoring. Integrates with Cloud Logging."
+            },
+            monitoring: {
+                title: "Monitoring",
+                content: "Comprehensive observability. Creates alert policies for latency, error rates, CPU, memory. Builds dashboards and uptime checks for services."
+            },
+            error_reporting: {
+                title: "Error Reporting",
+                content: "Error detection and tracking. Automatically captures and reports application errors with stack traces and context for debugging."
+            },
+            pubsub: {
+                title: "Pub/Sub",
+                content: "Message queuing and event streaming. Creates topics and subscriptions for asynchronous communication between services. Supports push/pull delivery."
+            },
+            bigquery: {
+                title: "BigQuery",
+                content: "Data warehouse and analytics. Creates datasets and tables for storing and analyzing large-scale data. Supports partitioning and clustering."
+            },
+            budget_alerts: {
+                title: "Budget Alerts",
+                content: "Cost monitoring and alerts. Sets up billing budgets with thresholds and sends notifications when costs exceed defined limits."
+            },
+            api: {
+                title: "API Enablement",
+                content: "Enables required Google Cloud APIs for the project. Automatically enables APIs needed by other modules (Cloud Run, Secret Manager, etc.)."
+            }
+        };
+
+        function showInfo(module) {
+            const info = moduleInfo[module];
+            if (info) {
+                document.getElementById('infoTitle').textContent = info.title;
+                document.getElementById('infoContent').textContent = info.content;
+                document.getElementById('infoPanel').classList.add('show');
+                
+                // Highlight the component
+                document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+                document.querySelector(`[data-module="${module}"]`).classList.add('active');
+            }
+        }
+
+        function closeInfo() {
+            document.getElementById('infoPanel').classList.remove('show');
+            document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+        }
+
+        function animateAll() {
+            const components = document.querySelectorAll('.component');
+            components.forEach((comp, index) => {
+                setTimeout(() => {
+                    comp.classList.add('active');
+                    setTimeout(() => comp.classList.remove('active'), 1000);
+                }, index * 200);
+            });
+        }
+
+        function resetAnimation() {
+            document.querySelectorAll('.component').forEach(c => c.classList.remove('active'));
+            closeInfo();
+        }
+
+        // Close info panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.component') && !e.target.closest('.info-panel')) {
+                closeInfo();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeInfo();
+            }
+        });
+    </script>
+</body>
+</html>
+
