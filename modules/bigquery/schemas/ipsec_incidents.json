@@ -1,0 +1,112 @@
+[
+  {
+    "name": "incident_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Unique incident identifier"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Incident creation timestamp"
+  },
+  {
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Incident last update timestamp"
+  },
+  {
+    "name": "resolved_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Incident resolution timestamp"
+  },
+  {
+    "name": "severity",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Incident severity (P1, P2, P3, P4)"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Incident status (open, in_progress, resolved, closed)"
+  },
+  {
+    "name": "title",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Incident title"
+  },
+  {
+    "name": "description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Incident description"
+  },
+  {
+    "name": "root_cause",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Root cause analysis"
+  },
+  {
+    "name": "affected_services",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "List of affected services"
+  },
+  {
+    "name": "affected_customers",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "Number of affected customers"
+  },
+  {
+    "name": "alarm_count",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "Number of associated alarms"
+  },
+  {
+    "name": "region",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Geographic region"
+  },
+  {
+    "name": "assigned_team",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Team assigned to the incident"
+  },
+  {
+    "name": "correlation_ids",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "Related alarm IDs"
+  },
+  {
+    "name": "classification",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "AI classification result"
+  },
+  {
+    "name": "confidence_score",
+    "type": "FLOAT64",
+    "mode": "NULLABLE",
+    "description": "Classification confidence score"
+  },
+  {
+    "name": "raw_data",
+    "type": "JSON",
+    "mode": "NULLABLE",
+    "description": "Raw incident data"
+  }
+]
+
+

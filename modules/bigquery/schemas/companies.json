@@ -1,0 +1,52 @@
+[
+  {
+    "name": "company_id",
+    "type": "INT64",
+    "mode": "REQUIRED",
+    "description": "Unique company identifier"
+  },
+  {
+    "name": "name",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Company name"
+  },
+  {
+    "name": "slug",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "URL-friendly company identifier"
+  },
+  {
+    "name": "category",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Company category (telecom, ISP, etc.)"
+  },
+  {
+    "name": "country",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Country code"
+  },
+  {
+    "name": "is_active",
+    "type": "BOOL",
+    "mode": "NULLABLE",
+    "description": "Whether the company is actively monitored"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Record creation timestamp"
+  },
+  {
+    "name": "updated_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Record last update timestamp"
+  }
+]
+
+

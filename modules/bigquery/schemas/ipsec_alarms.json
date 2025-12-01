@@ -1,0 +1,88 @@
+[
+  {
+    "name": "alarm_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Unique alarm identifier"
+  },
+  {
+    "name": "timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Alarm timestamp"
+  },
+  {
+    "name": "severity",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Alarm severity (critical, major, minor, warning)"
+  },
+  {
+    "name": "source",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Source system of the alarm"
+  },
+  {
+    "name": "device_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Device identifier"
+  },
+  {
+    "name": "device_name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Device name"
+  },
+  {
+    "name": "tunnel_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "IPSec tunnel identifier"
+  },
+  {
+    "name": "alarm_type",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Type of alarm"
+  },
+  {
+    "name": "description",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Alarm description"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Alarm status (active, acknowledged, cleared)"
+  },
+  {
+    "name": "customer_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Customer identifier"
+  },
+  {
+    "name": "region",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Geographic region"
+  },
+  {
+    "name": "raw_data",
+    "type": "JSON",
+    "mode": "NULLABLE",
+    "description": "Raw alarm data"
+  },
+  {
+    "name": "ingestion_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Data ingestion timestamp"
+  }
+]
+
+

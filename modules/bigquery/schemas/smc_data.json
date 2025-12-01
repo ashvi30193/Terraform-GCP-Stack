@@ -1,0 +1,40 @@
+[
+  {
+    "name": "value",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "Counter or incident value"
+  },
+  {
+    "name": "date",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp of the data point"
+  },
+  {
+    "name": "_object",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Object type identifier"
+  },
+  {
+    "name": "company",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "Numeric company/service ID"
+  },
+  {
+    "name": "companyName",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Name of the company"
+  },
+  {
+    "name": "ingestion_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Timestamp when data was ingested"
+  }
+]
+
+

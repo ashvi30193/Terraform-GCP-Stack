@@ -1,0 +1,64 @@
+[
+  {
+    "name": "id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Unique report identifier"
+  },
+  {
+    "name": "company_id",
+    "type": "INT64",
+    "mode": "REQUIRED",
+    "description": "Company identifier"
+  },
+  {
+    "name": "company_name",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Company name"
+  },
+  {
+    "name": "report_count",
+    "type": "INT64",
+    "mode": "NULLABLE",
+    "description": "Number of reports"
+  },
+  {
+    "name": "timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Report timestamp"
+  },
+  {
+    "name": "baseline",
+    "type": "FLOAT64",
+    "mode": "NULLABLE",
+    "description": "Baseline value for comparison"
+  },
+  {
+    "name": "severity",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Severity level of the report"
+  },
+  {
+    "name": "category",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Report category"
+  },
+  {
+    "name": "raw_data",
+    "type": "JSON",
+    "mode": "NULLABLE",
+    "description": "Raw JSON data from source"
+  },
+  {
+    "name": "ingestion_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Data ingestion timestamp"
+  }
+]
+
+
